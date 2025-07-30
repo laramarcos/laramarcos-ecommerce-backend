@@ -40,23 +40,23 @@ async function createProduct(req, res) {
 
 
 async function getProducts(req, res) {
+  try {
+    const products = await Product.find({}).select('-__v').sort({ name: 1 });
     
+    // Asegúrate de devolver un array, incluso si está vacío
+    if (!products || products.length === 0) {
+      return res.status(200).json([]); // Devuelve array vacío, no null/undefined
+    }
 
-    try {
-        const products = await Product.find({})
-            .select({ __v: 0 })
-            .sort({ name: 1 })
-            .collation({ locale: "es" })
-            
-    return res.status(200).send({
-            message: "Productos obtenidos correctamente",
-            products
-        });
-    
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send({message: "Error al obtener los productos"});
-}}
+    res.status(200).json(products); // Formato { products: [...] } si prefieres
+  } catch (error) {
+    console.error("Error en getProducts:", error);
+    res.status(500).json({ 
+      message: "Error al obtener productos",
+      error: error.message // Detalle del error
+    });
+  }
+}
 
 
 async function getProductById(req, res) {}
