@@ -3,7 +3,20 @@ const mongoose = require("mongoose");
 
 async function createProduct(req, res) {
   try {
+    console.log("req.body", req.body);
+
     const product = new Product(req.body);
+
+    if(req.file) {
+      console.log("req FILE multer", req.file);
+      // Asignar el nombre del producto del archivo de la imagen al producto
+      product.image = req.file.filename;
+    } else {
+      return res.status(400).send({
+        message: "Debe enviar una imagen del producto"
+      });
+    }
+
     const productSaved = await product.save();
 
     return res.status(201).send({
@@ -45,7 +58,6 @@ async function getProducts(req, res) {
         return res.status(500).send({message: "Error al obtener los productos"});
 }}
 
-async function getProducts(req, res) {}
 
 async function getProductById(req, res) {}
 

@@ -29,7 +29,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    enum: ["electronics", "clothing", "home", "books", "toys"],
+    enum: ["dulce", "salado", "vegano"],
   },
   createdAt: {
     type: Date,
